@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Join into Decentralized ID</title>
+    {#    <script src="https://cdn.jsdelivr.net/npm/web3@1.0.0-beta.55/dist/web3.umd.min.js"></script>#}
+    <script src="{% static 'web3.js-1.0.0.js' %}"></script>
+    {#    <script src="{% static 'client_registration.js' %}"></script>#}
+    <script>
+        const payerAddress = "0xE69e769b524B7cE3a85E4c363e41112EA2bd5633";
+        const abi = [
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "clientAddresses",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "clients",
+                "outputs": [
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "clientId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "pubKey",
+                        "type": "string"
+                    },
+                    {
+                        "name": "clientAddress",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_clientName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_clientId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_pubKey",
+                        "type": "string"
+                    }
+                ],
+                "name": "registerClient",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_clientId",
+                        "type": "string"
+                    }
+                ],
+                "name": "unregisterClient",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_newPubKey",
+                        "type": "string"
+                    }
+                ],
+                "name": "changePubKey",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "clientId",
+                        "type": "string"
+                    }
+                ],
+                "name": "getClientSummary",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+        const contractAddress = "0x43a933bc4686d0a671e5528f35227a6ff337fdf2";
+
+
+    </script>
+</head>
+<body>
+<button onclick="">Register</button>
+<input type="text" name="clientName">
+<input type="text" name="clientId">
+<input type="text" name="clientPubKey">
+</body>
+<script>
+    function web3Provider() {
+        let wo = new Web3();
+        wo.setProvider(new Web3.providers.HttpProvider("http://localhost:7545"));
+        return wo;
+    }
+
+    function register(clientName, clientID, clientPubKey) {
+        let web3 = web3Provider();
+        {#let cont = web3.eth.Contract(abi, contractAddress);#}
+        let cont = new web3.eth.Contract(abi, contractAddress);
+        cont.methods.registerClient(clientName, "b", "c").send({'from': payerAddress, 'gas': 1500000},
+            function (error, hash) {
+            alert(txhash)
+            }
+        );
+    }
+
+    register();
+</script>
+</html>

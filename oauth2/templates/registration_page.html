@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Registration Page</title>
+    {% load static %}
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Font-->
+    <link rel="stylesheet" type="text/css" href="{% static 'registration_css/opensans-font.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'fonts/material-design-iconic-font/css/material-design-iconic-font.min.css' %}">
+    <!-- Main Style Css -->
+    <link rel="stylesheet" href="{% static 'registration_css/style.css' %}"/>
+    <script src="{% static 'web3.js-1.0.0.js' %}"></script>
+    <script>
+        const payerAddress = "0x4606834976F8bd6D1AFcFE05f8bf8bc6b60F8042";
+        const abi = [
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "clientAddresses",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "clients",
+                "outputs": [
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "clientId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "pubKey",
+                        "type": "string"
+                    },
+                    {
+                        "name": "scopes",
+                        "type": "string"
+                    },
+                    {
+                        "name": "clientAddress",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_clientName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_clientId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_pubKey",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_scopes",
+                        "type": "string"
+                    }
+                ],
+                "name": "registerClient",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_clientId",
+                        "type": "string"
+                    }
+                ],
+                "name": "unregisterClient",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_newPubKey",
+                        "type": "string"
+                    }
+                ],
+                "name": "changePubKey",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "clientId",
+                        "type": "string"
+                    }
+                ],
+                "name": "getClientSummary",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+        const contractAddress = "0x669681218c2Cf0f18a45112c6860a1eC8bb8aB47";
+    </script>
+</head>
+<body>
+<div class="page-content">
+    <div class="form-v1-content">
+        <div class="wizard-form">
+            <form class="form-register" action="#" method="post">
+                <div id="form-total">
+                    <!-- SECTION 1 -->
+                    <h2>
+                        <p class="step-icon"><span>01</span></p>
+                        <span class="step-text">Client Information</span>
+                    </h2>
+                    <section>
+                        <div class="inner">
+                            <div class="wizard-header">
+                                <h3 class="heading">Client Information</h3>
+                                <p>Please enter your infomation and proceed to the next step so we can build your
+                                    accounts. </p>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-holder form-holder-2">
+                                    <fieldset>
+                                        <legend>Client Name</legend>
+                                        <input type="text" class="form-control" id="clientName" name="clientName"
+                                               placeholder="Name of your service" required>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            {#								<div class="form-row">#}
+                            {#									<div class="form-holder form-holder-2">#}
+                            {#										<fieldset>#}
+                            {#											<legend>Your Email</legend>#}
+                            {#											<input type="text" name="email" id="email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="Email for contacting service manager" required>#}
+                            {#										</fieldset>#}
+                            {#									</div>#}
+                            {#								</div>#}
+                            <div class="form-row">
+                                <div class="form-holder form-holder-2">
+                                    <fieldset>
+                                        <legend>Encryption key</legend>
+                                        <input type="text" class="form-control" id="clientPubKey" name="clientPubKey"
+                                               placeholder="The service owned public key for encryption" required>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- SECTION 2 -->
+                    <h2>
+                        <p class="step-icon"><span>02</span></p>
+                        <span class="step-text">Scope Requirement</span>
+                    </h2>
+                    <section>
+                        <div class="inner">
+                            <div class="wizard-header">
+                                <h3 class="heading">Scope Requirement</h3>
+                                <p>Please enter your infomation and proceed to the next step so we can build your
+                                    accounts.</p>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-holder form-holder-1">
+                                    <input type="text" name="find_bank" id="find_bank" placeholder="Find Your Claim"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row-total">
+                                <div class="form-row">
+                                    <div>
+                                        <script>
+                                            function getCheckbox() {
+                                                let ret = '[';
+                                                $('input[name="scopes"]:checked').each(function () {
+                                                    ret += this.value + ', ';
+                                                });
+                                                let posEnd = ret.lastIndexOf(',');
+                                                ret = ret.substring(0, posEnd);
+                                                ret += ']';
+                                                return ret;
+                                            }
+                                        </script>
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="nickname">Nickname
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes" value="name">Name
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="given_name">Given Name
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="family_name">Family Name<br>
+
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="middle_name">Middle Name
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="picture">Picture
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="gender">Gender
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="email">Email<br>
+
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="website">Web Site
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="birthdate">Birth Date
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="address">Address
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="phone_number">Phone Number<br>
+
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="locale">Locale
+                                        <input type="checkbox" class="checkbox-row" multiple name="scopes"
+                                               value="zoneinfo">Zone Info
+                                    </div>
+                                </div>
+                            </div>
+                            {#								<div class="form-row-total">#}
+                            {#									<div class="form-row">#}
+                            {#				                		<div class="form-holder form-holder-2 form-holder-3">#}
+                            {#				                			<input type="radio" class="radio" name="bank-1" id="bank-1" value="bank-1" checked>#}
+                            {#				                			<label class="bank-images label-above bank-1-label" for="bank-1">#}
+                            {#				                				<img src="images/form-v1-1.png" alt="bank-1">#}
+                            {#				                			</label>#}
+                            {#											<input type="radio" class="radio" name="bank-2" id="bank-2" value="bank-2">#}
+                            {#											<label class="bank-images label-above bank-2-label" for="bank-2">#}
+                            {#												<img src="images/form-v1-2.png" alt="bank-2">#}
+                            {#											</label>#}
+                            {#											<input type="radio" class="radio" name="bank-3" id="bank-3" value="bank-3">#}
+                            {#											<label class="bank-images label-above bank-3-label" for="bank-3">#}
+                            {#												<img src="images/form-v1-3.png" alt="bank-3">#}
+                            {#											</label>#}
+                            {#				                		</div>#}
+                            {#				                	</div>#}
+                            {#				                	<div class="form-row">#}
+                            {#				                		<div class="form-holder form-holder-2 form-holder-3">#}
+                            {#				                			<input type="radio" class="radio" name="bank-4" id="bank-4" value="bank-4">#}
+                            {#				                			<label class="bank-images bank-4-label" for="bank-4">#}
+                            {#				                				<img src="images/form-v1-4.png" alt="bank-4">#}
+                            {#				                			</label>#}
+                            {#											<input type="radio" class="radio" name="bank-5" id="bank-5" value="bank-5">#}
+                            {#											<label class="bank-images bank-5-label" for="bank-5">#}
+                            {#												<img src="images/form-v1-5.png" alt="bank-5">#}
+                            {#											</label>#}
+                            {#											<input type="radio" class="radio" name="bank-6" id="bank-6" value="bank-6">#}
+                            {#											<label class="bank-images bank-6-label" for="bank-6">#}
+                            {#												<img src="images/form-v1-6.png" alt="bank-6">#}
+                            {#											</label>#}
+                            {#				                		</div>#}
+                            {#				                	</div>#}
+                            {#								</div>#}
+                        </div>
+                    </section>
+                    <!-- SECTION 3 -->
+                    <h2>
+                        <p class="step-icon"><span>03</span></p>
+                        <span class="step-text">Client Declaration</span>
+                    </h2>
+                    <section>
+                        <div class="inner">
+                            <div class="wizard-header">
+                                <h3 class="heading">Upload and get client-secret</h3>
+                                <p>Your client information need to be uploaded to Contract. <b>This Step require
+                                    Meta-mask!</b></p>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-holder form-holder-2">
+                                    <input type="checkbox" class="radio" name="radio1" id="plan-1" value="plan-1"
+                                           onclick="register(clientName, '{{ client_id }}', clientPubKey)">
+                                    <label class="plan-icon plan-1-label" for="plan-1">
+                                        <img src="{% static 'registration_images/ethereum.png' %}" alt="pay-1">
+                                    </label>
+                                    <div class="plan-total">
+                                        <span class="plan-title">Upload to Smart contract</span>
+                                        <p class="plan-text">Press left button for your registration. <br>This process
+                                            is <u>mandatory</u>.</p>
+                                    </div>
+                                    {#			                			<input type="checkbox" class="radio" name="radio1" id="plan-2" value="plan-2">#}
+                                    {#			                			<label class="plan-icon plan-2-label" for="plan-2">#}
+                                    {#			                					<img src="{% static 'registration_images/form-v1-icon-2.png' %}" alt="pay-1">#}
+                                    {#			                			</label>#}
+                                    <div class="plan-total">
+                                        <span class="plan-title">Client-ID</span>
+                                        <p class="plan-text" id="clientIdText">{{ client_id }}</p>
+                                    </div>
+                                    {#										<input type="checkbox" class="radio" name="radio1" id="plan-3" value="plan-3" checked>#}
+                                    {#										<label class="plan-icon plan-3-label" for="plan-3">#}
+                                    {#		                					<img src="{% static 'registration_images/form-v1-icon-3.png' %}" alt="pay-2">#}
+                                    {#										</label>#}
+                                    <div class="plan-total">
+                                        <span class="plan-title">Client-Secret</span>
+                                        <p class="plan-text" id="clientSecretText">unknown</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'registration_js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'registration_js/jquery.steps.js' %}"></script>
+<script src="{% static 'registration_js/main.js' %}"></script>
+<script>
+    function web3Provider() {
+        let wo = new Web3();
+        wo.setProvider(new Web3(web3.currentProvider));
+        {#wo.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));#}
+        return wo;
+    }
+
+    function register() {
+        let clientName = $("#clientName").val();//document.getElementById('clientName').innerText;
+        let clientId = '{{ client_id }}';
+        let clientPubKey = $("#clientPubKey").val(); //document.getElementById('clientID').innerText;
+        let scopes = getCheckbox();
+        let web3 = web3Provider();
+
+        {#let cont = web3.eth.Contract(abi, contractAddress);#}
+        let cont = new web3.eth.Contract(abi, contractAddress);
+        cont.methods.registerClient(clientName, clientId, clientPubKey, scopes).send({
+                'from': web3.eth.accounts[0],
+                {#'from': payerAddress,#}
+                'gas': 1500000
+            },
+            function (error, hash) {
+                if (error) {
+                    alert(error);
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        'transaction_hash': hash,
+                        'client_name': clientName,
+                        'client_id': clientId,
+                        'client_pub_key': clientPubKey
+                    },
+                    url: './client_secret_assignment',
+                    success: function (result) {
+                        $("#clientSecretText").text(result['client_secret']);
+                        alert(result['client_secret'])
+                    }
+                });
+            }
+        );
+    }
+</script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

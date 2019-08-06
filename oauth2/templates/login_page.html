@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Login First</title>
+    <script src="{% static 'registration_js/patternlock2.js' %}"></script>
+    <link href="{% static 'registration_css/patternlock2-1.css' %}" rel="stylesheet">
+    <link href="{% static 'registration_css/patternlock2-2.css' %}" rel="stylesheet">
+    <link href="{% static 'registration_css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+<form action="{% url 'login' %}" method="POST" onsubmit="addPatternData()">
+    <br>
+    <div align="center">
+        <input type="text" name="email" placeholder="Email">
+        <input type="text" name="password" placeholder="Password" id="password">
+        <input type="hidden" name="key" value="{{ request.GET.key }}">
+        <div id="patternHolder7"></div>
+        <button>submit</button>
+    </div>
+</form>
+<script>
+    function addPatternData() {
+        let password = document.getElementsByName("password")[0];
+        alert(lock.getPattern().toString());
+        $("#password").val(getPatternCode());
+    }
+
+    var options = {matrix: [4, 4], allowRepeat: false, enableSetPattern: true};
+    var lock = new PatternLock("#patternHolder7", options);
+    {#lock.setPattern('3,7,11,15,16');#}
+
+    function getPatternCode() {
+        let lockSequence = lock.getPattern().toString();
+        let numbers = lockSequence.split(',');
+        let lockSequenceArray = "[";
+        {#lockSequenceArray.push("[");#}
+        for (let i = 0; i < numbers.length; i++) {
+            {#lockSequenceArray.push(numbers[i]);#}
+            lockSequenceArray += numbers[i];
+            if (numbers.length != i + 1) {
+                lockSequenceArray += ",";
+            }
+        }
+        {#lockSequenceArray.push("]");#}
+        lockSequenceArray += "]";
+        return lockSequenceArray;
+    }
+
+</script>
+</body>
+</html>
