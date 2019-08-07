@@ -3,12 +3,17 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+from eth3.models import ContractLog
 from oauth2.secret_generator import random_string_digits
 
 
 def register_page(request):
     # 사용자가 제시한 값이 맞는지 확인한다. (right tx-data?)
-    context = {'client_id': random_string_digits(32)}
+    contract = ContractLog.objects.get(contract_name__exact='client_management')
+    context = {
+        'client_id': random_string_digits(32),
+        'cm_contract_address': contract.address
+    }
     return render(request, 'registration_page.html', context=context)
 
 
