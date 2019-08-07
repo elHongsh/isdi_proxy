@@ -14,173 +14,8 @@
     <link rel="stylesheet" href="{% static 'registration_css/style.css' %}"/>
     <script src="{% static 'web3.js-1.0.0.js' %}"></script>
     <script>
-        const payerAddress = "0x4606834976F8bd6D1AFcFE05f8bf8bc6b60F8042";
-        const abi = [
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "",
-                        "type": "bytes32"
-                    }
-                ],
-                "name": "clientAddresses",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "",
-                        "type": "bytes32"
-                    }
-                ],
-                "name": "clients",
-                "outputs": [
-                    {
-                        "name": "name",
-                        "type": "string"
-                    },
-                    {
-                        "name": "clientId",
-                        "type": "string"
-                    },
-                    {
-                        "name": "pubKey",
-                        "type": "string"
-                    },
-                    {
-                        "name": "scopes",
-                        "type": "string"
-                    },
-                    {
-                        "name": "clientAddress",
-                        "type": "address"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_clientName",
-                        "type": "string"
-                    },
-                    {
-                        "name": "_clientId",
-                        "type": "string"
-                    },
-                    {
-                        "name": "_pubKey",
-                        "type": "string"
-                    },
-                    {
-                        "name": "_scopes",
-                        "type": "string"
-                    }
-                ],
-                "name": "registerClient",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "bytes32"
-                    }
-                ],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_clientId",
-                        "type": "string"
-                    }
-                ],
-                "name": "unregisterClient",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_newPubKey",
-                        "type": "string"
-                    }
-                ],
-                "name": "changePubKey",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {
-                        "name": "clientId",
-                        "type": "string"
-                    }
-                ],
-                "name": "getClientSummary",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "string"
-                    },
-                    {
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
+        const payerAddress = "0x5711452cd6d8E0d456E8650FAe0C1098D0228207";
+        const abi = {{ cm_contract_abi | safe }};
         const contractAddress = "{{cm_contract_address}}";
     </script>
 </head>
@@ -208,6 +43,15 @@
                                         <legend>Client Name</legend>
                                         <input type="text" class="form-control" id="clientName" name="clientName"
                                                placeholder="Name of your service" required>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-holder form-holder-2">
+                                    <fieldset>
+                                        <legend>Redirect URI</legend>
+                                        <input type="text" class="form-control" id="redirectUrl" name="redirectUrl"
+                                               placeholder="www.example.com/authcode" required>
                                     </fieldset>
                                 </div>
                             </div>
@@ -387,8 +231,8 @@
 <script>
     function web3Provider() {
         let wo = new Web3();
-        wo.setProvider(new Web3(web3.currentProvider));
-        {#wo.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));#}
+        {#wo.setProvider(new Web3(web3.currentProvider));#}
+        wo.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
         return wo;
     }
 
@@ -397,13 +241,14 @@
         let clientId = '{{ client_id }}';
         let clientPubKey = $("#clientPubKey").val(); //document.getElementById('clientID').innerText;
         let scopes = getCheckbox();
+        let redirectUrl = $("#redirectUrl").val();
         let web3 = web3Provider();
 
         {#let cont = web3.eth.Contract(abi, contractAddress);#}
         let cont = new web3.eth.Contract(abi, contractAddress);
-        cont.methods.registerClient(clientName, clientId, clientPubKey, scopes).send({
-                'from': web3.eth.accounts[0],
-                {#'from': payerAddress,#}
+        cont.methods.registerClient(clientName, clientId, clientPubKey, scopes, redirectUrl).send({
+                {#'from': web3.eth.accounts[0],#}
+                'from': payerAddress,
                 'gas': 1500000
             },
             function (error, hash) {

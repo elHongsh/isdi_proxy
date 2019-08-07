@@ -12,7 +12,8 @@ def register_page(request):
     contract = ContractLog.objects.get(contract_name__exact='client_management')
     context = {
         'client_id': random_string_digits(32),
-        'cm_contract_address': contract.address
+        'cm_contract_address': contract.address,
+        'cm_contract_abi': contract.abi,
     }
     return render(request, 'registration_page.html', context=context)
 
