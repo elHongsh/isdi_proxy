@@ -1,12 +1,13 @@
 import json
+import os
 from typing import Dict
 
 import requests
 
-SERVER_KEY = "AAAA5EVClXU:APA91bEpLHBJe5TFirC1a0Tmjz0mXVuj90v3ZtKly7T0A8xrcwPTDfAjETPJdoSQLGMtkvOk1wLd1n21s1ipGEIHUhu4IqZ2urS7H3ZrKyc0HIVz0_woJdipDzt9iYtw9uhg_-WsFJNz"
-PROJECT_ID = "isdi-19ce0"
-REGISTRATION_TOKEN = "cwJBhRdL0eM:APA91bFbTjtl8O3c0le6xT0h7Lb_J_1JKqbUGgL-iW6gygq4rm_lYNV67zvHpePv8CzlnXMhr9BCgQctTOThlT6MqgysRLZHc0Rxnnyyo_dWxr3YRYfIVxd2X_KsSC7fUzUINwtC7GM8"
-GOOGLE_URL = "https://fcm.googleapis.com/fcm/send"
+SERVER_KEY = os.environ.get('SERVER_KEY')
+PROJECT_ID = os.environ.get('PROJECT_ID')
+REGISTRATION_TOKEN = os.environ.get('REGISTRATION_TOKEN')
+GOOGLE_URL = os.environ.get('GOOGLE_URL')
 
 
 class FcmCover:
